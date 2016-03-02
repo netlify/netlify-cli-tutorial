@@ -156,11 +156,14 @@ export default class Term extends React.Component {
     const lines = [];
     lines.push(prompt + cmd);
     if (handler) {
-      handler.call(this, words.slice(1)).map((output) => { lines.push(output); });
+      Promise.resolve(handler.call(this, words.slice(1))).then((result) => {
+        result.map((output) => { lines.push(output); });
+        this.addHistory(lines);
+      });
     } else {
       lines.push("-bash: " + cmd + ": command not found");
+      this.addHistory(lines);
     }
-    this.addHistory(lines);
   }
 
   handleInput(e) {
