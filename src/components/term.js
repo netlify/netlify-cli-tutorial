@@ -4,7 +4,7 @@ export default class Term extends React.Component {
   constructor(props) {
     super(props);
     this.handleInput = this.handleInput.bind(this);
-    this.handleKeyUp = this.handleKeyUp.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.state = {
       cmd: "",
@@ -35,7 +35,6 @@ export default class Term extends React.Component {
   }
 
   getDir(dir) {
-    console.log('Getting dir: %o', dir);
     const { files } = this.state;
     const segments = dir.split('/').filter((s) => s);
     return segments.reduce(((dir, segment) => dir && dir[segment]), files);
@@ -74,14 +73,12 @@ export default class Term extends React.Component {
     } else {
       newDir = '';
     }
-    console.log(`setting cwd: ${newDir}`);
     this.setState({cwd: newDir});
     return [];
   }
 
   ls(words) {
     const cwd = this.getCwd();
-    console.log('got cwd: %o', cwd);
     let lines = []
     if (words.length) {
       for (var i=0; i<words.length; i++) {
@@ -121,6 +118,32 @@ export default class Term extends React.Component {
     return lines;
   }
 
+  tabComplete() {
+    const { cmd } = this.state;
+    const words = cmd.split(" ").filter((w) => w);
+    switch (words.length) {
+      case 0:
+        break;
+      case 1:
+        const commands = Object.keys(this.commands);
+        for (var i=0; i < commands.length; i++) {
+          if (words[0] === commands[i].slice(0, words[0].length)) {
+            return this.setState({cmd: commands[i]});
+          }
+        }
+      default:
+        const dir = this.getCwd();
+        const files = Object.keys(dir);
+        const word = words[words.length-1];
+        for (var i=0; i < files.length; i++) {
+          if (word == files[i].slice(0,word.length)) {
+            words[words.length - 1] = files[i];
+            return this.setState({cmd: words.join(' ')});
+          }
+        }
+    }
+  }
+
   addHistory(lines) {
     const history = this.state.history.concat(lines);
     this.setState({history: history, cmd: ""});
@@ -149,11 +172,14 @@ export default class Term extends React.Component {
     this.setState({cmd, cmd});
   }
 
-  handleKeyUp(e) {
-    if (e.keyCode === 8) {
-      // Backspace
-      const cmd = this.state.cmd.slice(0,-1);
-      this.setState({cmd, cmd});
+  handleKeyDown(e) {
+    switch (e.keyCode) {
+      case 8:
+        const cmd = this.state.cmd.slice(0,-1);
+        return this.setState({cmd, cmd});
+      case 9:
+        e.preventDefault();
+        return this.tabComplete();
     }
   }
 
@@ -175,7 +201,7 @@ export default class Term extends React.Component {
               ref={(ref) => this.prompt = ref}
               type="text"
               value={this.state.cmd}
-              onKeyUp={this.handleKeyUp}
+              onKeyDown={this.handleKeyDown}
               onKeyPress={this.handleInput}/>
         </p>
       </div>
