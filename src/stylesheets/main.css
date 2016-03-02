@@ -1,0 +1,60 @@
+:root {
+  --term-background: #222;
+  --term-text: #fff;
+  --term-prompt: #eee;
+  --term-padding: 5px;
+  --term-font-size: 13px;
+  --term-font-family: monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.term {
+  width: 500px;
+  height: 300px;
+  background: var(--term-background);
+  color: var(--term-text);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -150px 0 0 -250px;
+  font-family: var(--term-font-family);
+  padding: var(--term-padding);
+  padding-top: calc(var(--term-padding) + 2em);
+}
+.term--title {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1;
+  background: var(--term-background);
+  color: var(--term-prompt);
+  text-align: center;
+  padding: var(--term-padding);
+  border-bottom: 1px solid var(--term-prompt);
+}
+.term--body {
+  overflow: auto;
+  height: 100%;
+}
+
+.term--prompt {
+  color: var(--term--prompt);
+}
+
+.term--input {
+  border: none;
+  background: var(--term-background);
+  color: var(--term-text);
+  font-family: monospace;
+  outline: 0;
+}
+.term--history, .term--current {
+  margin: 0;
+}
+.term, .term--input {
+  font-size: var(--term-font-size);
+}
