@@ -37,7 +37,7 @@ export default class Term extends React.Component {
   getDir(dir) {
     const { files } = this.state;
     const segments = dir.split('/').filter((s) => s);
-    return segments.reduce(((dir, segment) => dir && dir[segment]), files);
+    return segments.reduce(((dir, segment) => dir && typeof dir[segment] === 'object' && dir[segment]), files);
   }
 
   getCwd() {
@@ -65,6 +65,8 @@ export default class Term extends React.Component {
       }
     } else if (dir === '..') {
       newDir = cwd.split('/').slice(0,-1).join('/');
+    } else if (dir === '.') {
+      newDir = cwd;
     } else if (dir) {
       newDir = cwd + '/' + dir;
       if (!this.getDir(newDir)) {
