@@ -42,7 +42,7 @@
 }
 
 .term--prompt {
-  color: var(--term--prompt);
+  color: var(--term-prompt);
 }
 
 .term--input {
