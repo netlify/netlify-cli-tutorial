@@ -35,7 +35,7 @@ class Term extends React.Component {
     switch (e.keyCode) {
       case 8:
         const cmd = this.props.cmd.slice(0, -1);
-        return this.setCmd(cmd);
+        return this.props.setCmd(cmd);
       case 9:
         e.preventDefault();
         this.props.autocomplete();
