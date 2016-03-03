@@ -1,5 +1,5 @@
 import { lookup } from '../lib/filesystem';
-import { addHistory, prompt } from './base';
+import { addHistory } from './base';
 
 export function ls(names) {
   return (dispatch, getState) => {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { prompt, initFilesystem } from '../actions/base';
-import { run } from '../actions/run';
+import { prompt, initFilesystem, appendCmd, setCmd } from '../actions/base';
+import { run, autocomplete, popHistory } from '../actions/run';
 
 class Term extends React.Component {
   constructor(props) {
@@ -9,7 +9,6 @@ class Term extends React.Component {
     this.handleInput = this.handleInput.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleClick = this.handleClick.bind(this);
-    this.state = {cmd: ''};
   }
 
   componentDidMount() {
@@ -25,29 +24,24 @@ class Term extends React.Component {
     this.prompt && this.prompt.focus();
   }
 
-  runCmd() {
-    const { cmd } = this.state;
-    this.props.run(cmd);
-    this.setState({cmd: ''});
-  }
-
   handleInput(e) {
     if (e.key === 'Enter') {
-      return this.runCmd();
+      return this.props.run();
     }
-
-    const cmd = this.state.cmd + e.key;
-    this.setState({cmd});
+    this.props.appendCmd(e.key);
   }
 
   handleKeyDown(e) {
     switch (e.keyCode) {
       case 8:
-        const cmd = this.state.cmd.slice(0, -1);
-        return this.setState({cmd});
+        const cmd = this.props.cmd.slice(0, -1);
+        return this.setCmd(cmd);
       case 9:
         e.preventDefault();
-      //   return this.tabComplete();
+        this.props.autocomplete();
+        break;
+      case 38:
+        this.props.popHistory();
     }
   }
 
@@ -68,7 +62,7 @@ class Term extends React.Component {
               className="term--input"
               ref={(ref) => this.prompt = ref}
               type="text"
-              value={this.state.cmd}
+              value={this.props.cmd}
               onKeyDown={this.handleKeyDown}
               onKeyPress={this.handleInput}
           />
@@ -79,8 +73,9 @@ class Term extends React.Component {
 }
 
 function mapStateToProps(state) {
-  const { files, history } = state;
+  const { cmd, files, history } = state;
   return {
+    cmd,
     files,
     history
   };
@@ -88,7 +83,11 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    setCmd: (cmd) => dispatch(setCmd(cmd)),
+    appendCmd: (char) => dispatch(appendCmd(char)),
     run: (cmd) => dispatch(run(cmd)),
+    autocomplete: () => dispatch(autocomplete()),
+    popHistory: () => dispatch(popHistory()),
     initFilesystem: (files) => dispatch(initFilesystem(files))
   };
 }
