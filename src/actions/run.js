@@ -3,14 +3,11 @@ import { lookup } from '../lib/filesystem';
 import { ls } from './ls';
 import { cd } from './cd';
 import { cat } from './cat';
-import { help } from './help';
+import { showHelp } from './help';
+import { npm } from './npm';
+import { netlify } from './netlify';
 
-const commands = {
-  ls: ls,
-  cd: cd,
-  cat: cat,
-  help: help
-};
+const commands = {ls, cd, cat, help: showHelp, npm, netlify};
 
 export function unkownCommand(cmd) {
   return addHistory(`-bash: ${cmd}: command not found`);

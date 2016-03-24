@@ -8,8 +8,20 @@ import './stylesheets/main.css';
 
 const store = configureStore();
 
-render((
-  <Provider store={store}>
-    <Term/>
-  </Provider>
-), document.getElementById('root'));
+if (window.$) {
+  window.$('.js-terminal').each(
+    (_, el) => {
+      render((
+        <Provider store={store}>
+          <Term/>
+        </Provider>
+      ), el);
+    }
+  );
+} else {
+  render((
+    <Provider store={store}>
+      <Term/>
+    </Provider>
+  ), document.getElementById('root'));
+}

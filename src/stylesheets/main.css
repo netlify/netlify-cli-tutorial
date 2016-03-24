@@ -12,14 +12,14 @@
 }
 
 .term {
-  width: 500px;
-  height: 300px;
+  width: 46em;
+  height: 36em;
   background: var(--term-background);
   color: var(--term-text);
   position: absolute;
   top: 50%;
   left: 50%;
-  margin: -150px 0 0 -250px;
+  margin: -18em 0 0 -23em;
   font-family: var(--term-font-family);
   padding: var(--term-padding);
   padding-top: calc(var(--term-padding) + 2em);
@@ -37,8 +37,9 @@
   border-bottom: 1px solid var(--term-prompt);
 }
 .term--body {
-  overflow: auto;
+  overflow: hidden;
   height: 100%;
+  margin: 0;
 }
 
 .term--prompt {
@@ -51,6 +52,7 @@
   color: var(--term-text);
   font-family: monospace;
   outline: 0;
+  width: 40em;
 }
 .term--history, .term--current {
   margin: 0;

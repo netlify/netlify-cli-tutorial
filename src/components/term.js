@@ -49,14 +49,17 @@ class Term extends React.Component {
     this.prompt && this.prompt.focus();
   }
 
+  componentDidUpdate() {
+    this.term.scrollTop = this.term.scrollHeight;
+  }
+
   render() {
     return <div className="term" onClick={this.handleClick}>
-      <div className="term--title">Terminal Demo</div>
-      <div className="term--body">
+      <pre className="term--body" ref={(ref) => this.term = ref}>
         {this.props.history.map((line, i) => (
-          <p className="term--history" key={i}>{line}</p>
+          <div className="term--history" key={i}>{line || <br/>}</div>
         ))}
-        <p className="term--current">
+        <div className="term--current">
           <span className="term--prompt">{prompt}</span>
           <input
               className="term--input"
@@ -66,8 +69,8 @@ class Term extends React.Component {
               onKeyDown={this.handleKeyDown}
               onKeyPress={this.handleInput}
           />
-        </p>
-      </div>
+        </div>
+      </pre>
     </div>;
   }
 }
