@@ -90,10 +90,10 @@ body {
   animation-name: blink;
   animation-iteration-count: infinite;
   display: inline-block;
-  width: 0.5em;
-  height: 1em;
+  width: 0.6em;
+  height: 1.1em;
   margin: 0 0 0 2px;
-  position: relative;
+  vertical-align: bottom;
 }
 .term--history, .term--current {
   margin: 0;
