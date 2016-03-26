@@ -1,13 +1,14 @@
-import { addHistory, prompt, clearCmd, setCmd, pushCmd, popCmd } from './base';
+import { addHistory, clearCmd, setCmd, pushCmd, popCmd } from './base';
 import { lookup } from '../lib/filesystem';
 import { ls } from './ls';
 import { cd } from './cd';
 import { cat } from './cat';
+import { clear } from './clear';
 import { showHelp } from './help';
 import { npm } from './npm';
 import { netlify } from './netlify';
 
-const commands = {ls, cd, cat, help: showHelp, npm, netlify};
+const commands = {ls, cd, cat, help: showHelp, clear, npm, netlify};
 
 export function unkownCommand(cmd) {
   return addHistory(`-bash: ${cmd}: command not found`);
@@ -54,12 +55,13 @@ export function popHistory() {
 
 export function run() {
   return (dispatch, getState) => {
-    const { cmd } = getState();
-    dispatch(addHistory(prompt + cmd));
+    const { cmd, prompt } = getState();
+
+    dispatch(addHistory(prompt.text + cmd));
     dispatch(clearCmd());
     dispatch(pushCmd(cmd));
     const words = cmd.split(' ').filter((w) => w);
-    const fn = commands[words[0]];
+    const fn = commands[prompt.handler || words[0]];
     if (fn) {
       dispatch(fn(words.slice(1)));
     } else {

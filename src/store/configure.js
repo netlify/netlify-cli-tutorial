@@ -7,7 +7,7 @@ import { files } from '../reducers/files';
 import { history } from '../reducers/history';
 import { help } from '../reducers/help';
 import { npm } from '../reducers/npm';
-
+import { prompt } from '../reducers/prompt';
 
 const reducer = combineReducers({
   cmd,
@@ -16,7 +16,8 @@ const reducer = combineReducers({
   files,
   history,
   help,
-  npm
+  npm,
+  prompt
 });
 
 const createStoreWithMiddleware = compose(

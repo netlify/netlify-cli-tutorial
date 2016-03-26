@@ -1,5 +1,3 @@
-export const prompt = '$ ';
-
 export const FS_INIT = 'FS_INIT';
 
 export function initFilesystem(files) {
@@ -15,6 +13,23 @@ export function addHistory(/* arguments */) {
   return {
     type: HIST_ADD,
     payload: Array.prototype.slice.call(arguments)
+  };
+}
+
+export const HIST_UPDATE = 'HIST_UPDATE';
+
+export function updateHistory(str) {
+  return {
+    type: HIST_UPDATE,
+    payload: str
+  };
+}
+
+export const HIST_CLEAR = 'HIST_CLEAR';
+
+export function clearHistory() {
+  return {
+    type: HIST_CLEAR
   };
 }
 

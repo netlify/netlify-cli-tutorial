@@ -1,9 +1,73 @@
-import { addHistory } from './base';
-import { showHelp, helpSeen } from './help';
+import { addHistory, updateHistory } from './base';
+import { showHelp } from './help';
+import { setPrompt, clearPrompt, hidePrompt } from './prompt';
+
+function configureSite(dispatch, state, answer) {
+  dispatch(addHistory('OK!'));
+  dispatch(setPrompt('netlify', '? Path to deploy? (current dir) ', {setting: 'dir'}));
+}
+
+function configureDir(dispatch, state, folder) {
+  dispatch(clearPrompt());
+  dispatch(addHistory('Deploying folder ' + folder));
+  const showDeploy = (uploaded) => {
+    var progress = '[';
+    for (var i = 0; i < 40; i++) {
+      if (i <= 40 * uploaded / 5) {
+        progress += '=';
+      } else {
+        progress += ' ';
+      }
+    }
+    progress += '] Uploading';
+    dispatch(updateHistory(progress));
+    if (uploaded == 5) {
+      console.log('All done...');
+      dispatch(addHistory(
+        'Awesome! You just deployed your first site to netlify',
+        '',
+        'Check it out at http://example.netlify.com/',
+        ''
+      ));
+      dispatch(clearPrompt());
+    } else {
+      var time = Math.random() * 800 + 200;
+      console.log('Setting timeout ', time);
+      setTimeout((() => showDeploy(uploaded + 1)), time);
+    }
+  };
+  dispatch(hidePrompt());
+  dispatch(addHistory(
+    '[                                        ] Uploading'
+  ));
+  showDeploy(0);
+}
+
+function deploy(dispatch, state) {
+  const { cwd } = state;
+  switch (cwd) {
+    case 'static-site':
+    case 'jekyll-site':
+      return dispatch(setPrompt('netlify', '? No site id specified, create a new site (Y/n) ', {setting: 'site'}));
+    default:
+      dispatch(addHistory(
+        'The real netlify CLI will let you push just about anything to our CDN',
+        'However, for this demo - try one of the example sites.'
+      ));
+  }
+}
 
 export function netlify(names) {
   return (dispatch, getState) => {
-    const { help, npm } = getState();
+    const { help, npm, prompt } = getState();
+    console.log('netlify - %o', names);
+
+    if (prompt.handler && prompt.data.setting == 'site') {
+      return configureSite(dispatch, getState(), names[0]);
+    }
+    if (prompt.handler && prompt.data.setting === 'dir') {
+      return configureDir(dispatch, getState(), names[0]);
+    }
 
     if (!npm.packages['netlify-cli']) {
       return dispatch(addHistory(
@@ -42,6 +106,8 @@ export function netlify(names) {
       if (!help.netlify) {
         dispatch(showHelp());
       }
+    } else if (names[0] === 'deploy') {
+      deploy(dispatch, getState());
     }
   };
 }

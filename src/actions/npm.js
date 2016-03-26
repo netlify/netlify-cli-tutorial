@@ -14,6 +14,7 @@ export function npm(names) {
     if (names.length) {
       switch (names[0]) {
         case 'install':
+        case 'i':
           if (names[1] === 'netlify-cli' && names[2] === '-g') {
             dispatch(install('netlify-cli'));
             return dispatch(addHistory(

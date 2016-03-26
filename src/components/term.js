@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { prompt, initFilesystem, appendCmd, setCmd } from '../actions/base';
+import { initFilesystem, appendCmd, setCmd } from '../actions/base';
 import { run, autocomplete, popHistory } from '../actions/run';
 
 class Term extends React.Component {
@@ -54,12 +54,14 @@ class Term extends React.Component {
   }
 
   render() {
+    const { prompt } = this.props;
+
     return <div className="term" onClick={this.handleClick}>
       <pre className="term--body" ref={(ref) => this.term = ref}>
         {this.props.history.map((line, i) => (
           <div className="term--history" key={i}>{line || <br/>}</div>
         ))}
-        <div className="term--current">
+        {prompt && <div className="term--current">
           <span className="term--prompt">{prompt}</span>
           <input
               className="term--input"
@@ -69,18 +71,19 @@ class Term extends React.Component {
               onKeyDown={this.handleKeyDown}
               onKeyPress={this.handleInput}
           />
-        </div>
+        </div>}
       </pre>
     </div>;
   }
 }
 
 function mapStateToProps(state) {
-  const { cmd, files, history } = state;
+  const { cmd, files, history, prompt } = state;
   return {
     cmd,
     files,
-    history
+    history,
+    prompt: prompt.text
   };
 }
 

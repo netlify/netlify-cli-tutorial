@@ -1,9 +1,9 @@
 :root {
-  --term-background: #222;
-  --term-text: #fff;
-  --term-prompt: #eee;
+  --term-background: #1f2727;
+  --term-text: #00c7b7;
+  --term-prompt: #00c7b7;
   --term-padding: 5px;
-  --term-font-size: 13px;
+  --term-font-size: 16px;
   --term-font-family: monospace;
 }
 
@@ -11,19 +11,23 @@
   box-sizing: border-box;
 }
 
+body {
+  background: var(--term-background);
+}
 .term {
-  width: 46em;
+  width: 36em;
   height: 36em;
   background: var(--term-background);
   color: var(--term-text);
   position: absolute;
   top: 50%;
   left: 50%;
-  margin: -18em 0 0 -23em;
+  margin: -18em 0 0 -18em;
   font-family: var(--term-font-family);
   padding: var(--term-padding);
   padding-top: calc(var(--term-padding) + 2em);
 }
+
 .term--title {
   position: absolute;
   top: 0;
@@ -40,6 +44,7 @@
   overflow: hidden;
   height: 100%;
   margin: 0;
+  white-space: pre-wrap;
 }
 
 .term--prompt {
@@ -52,11 +57,19 @@
   color: var(--term-text);
   font-family: monospace;
   outline: 0;
-  width: 40em;
+  width: 100%;
 }
 .term--history, .term--current {
   margin: 0;
 }
 .term, .term--input {
   font-size: var(--term-font-size);
+}
+
+.term--current {
+  display: flex;
+}
+.term--current .term--input,
+.term--current .term--prompt {
+
 }
