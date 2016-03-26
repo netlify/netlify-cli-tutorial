@@ -1,9 +1,7 @@
 # Terminal Emulator in React
 
-This is a small terminal emulator in react that can be useful for generating
-interactive tutorials in the browser.
-
-Still just in experiment stage...
+This is a small terminal emulator in react that runs an interactive turotial for
+netlify CLI.
 
 ## Installing
 

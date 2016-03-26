@@ -4,7 +4,7 @@
   --term-prompt: #00c7b7;
   --term-padding: 5px;
   --term-font-size: 16px;
-  --term-font-family: monospace;
+  --term-font-family: 'Inconsolata';
 }
 
 * {
@@ -15,14 +15,14 @@ body {
   background: var(--term-background);
 }
 .term {
-  width: 36em;
+  width: 38em;
   height: 36em;
   background: var(--term-background);
   color: var(--term-text);
   position: absolute;
   top: 50%;
   left: 50%;
-  margin: -18em 0 0 -18em;
+  margin: -18em 0 0 -19em;
   font-family: var(--term-font-family);
   padding: var(--term-padding);
   padding-top: calc(var(--term-padding) + 2em);
