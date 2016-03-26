@@ -1,7 +1,7 @@
 :root {
   --term-background: #1f2727;
   --term-text: #00c7b7;
-  --term-text-highlight: #F6FAFA;
+  --term-text-highlight: #0bd452; /* #0bde91 - #1994fa; */
   --term-prompt: #00c7b7;
   --term-padding: 5px;
   --term-font-size: 16px;
@@ -35,6 +35,9 @@ body {
   padding-top: calc(var(--term-padding) + 2em);
   overflow: auto;
 }
+.term--banner {
+  line-height: 1;
+}
 
 .term--title {
   position: absolute;
@@ -61,8 +64,8 @@ body {
   }
   em {
     font-style: normal;
-    background: var(--term-text);
-    color: var(--term-background);
+    /*background: var(--term-text);*/
+    color: var(--term-text-highlight);
   }
 }
 

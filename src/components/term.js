@@ -3,6 +3,23 @@ import { connect } from 'react-redux';
 import { initFilesystem, appendCmd, setCmd } from '../actions/base';
 import { run, autocomplete, popHistory } from '../actions/run';
 
+const banner = `
+                               ::   :::    :::::
+                        :::    ::         :::
+                        :::    ::         :::
+:: ::::::    ,::::::  ::::::,  ::   ::: ,::::::  :::    :::
+:::   :::   :::   :::   :::    ::   :::   :::    :::    :::
+::     ::: :::     ::   :::    ::   :::   :::     ::,  :::
+::     ::: ::::::::::   :::    ::   :::   :::     ,::  ::,
+::     ::: ::,          :::    ::   :::   :::      :::,::
+::     ::: ,::          :::    ::   :::   :::       ::::
+::     :::  :::::::::   :::::  ::   :::   :::       ::::
+,,     ,,,     :::,       ::,  ,,   ,,,   ,,,        ::
+                                                    :::
+                                                 ,::::
+                                                  ,,
+`;
+
 class Term extends React.Component {
   constructor(props) {
     super(props);
@@ -51,7 +68,6 @@ class Term extends React.Component {
     e.preventDefault();
     this.prompt && this.prompt.focus();
     if (e.target.tagName === 'STRONG') {
-      console.log('Setting cmd from %o', e.target.textContent);
       this.props.setCmd(e.target.textContent);
     }
   }
@@ -64,6 +80,8 @@ class Term extends React.Component {
     if (!line) { return {__html: '<br/>'}; }
     return {
       __html: line
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
         .replace(/\*\*(.+?)\*\*/g, (m, bold) => (
           `<strong>${bold}</strong>`
         ))
@@ -84,8 +102,10 @@ class Term extends React.Component {
   render() {
     const { prompt } = this.props;
 
+
     return <div className="term" onClick={this.handleClick} ref={this.bindTermRef}>
       <pre className="term--body">
+        <div className="term--banner">{banner}</div>
         {this.props.history.map((line, i) => (
           <div
               key={i}

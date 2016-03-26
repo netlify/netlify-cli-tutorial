@@ -4,26 +4,11 @@ function toArray(obj) {
   return Array.isArray(obj) ? obj : [obj];
 }
 
-const startScreen = `
-                               ::   :::    :::::
-                        :::    ::         :::
-                        :::    ::         :::
-:: ::::::    ,::::::  ::::::,  ::   ::: ,::::::  :::    :::
-:::   :::   :::   :::   :::    ::   :::   :::    :::    :::
-::     ::: :::     ::   :::    ::   :::   :::     ::,  :::
-::     ::: ::::::::::   :::    ::   :::   :::     ,::  ::,
-::     ::: ::,          :::    ::   :::   :::      :::,::
-::     ::: ,::          :::    ::   :::   :::       ::::
-::     :::  :::::::::   :::::  ::   :::   :::       ::::
-,,     ,,,     :::,       ::,  ,,   ,,,   ,,,        ::
-                                                    :::
-                                                 ,::::
-                                                  ,,
-Welcome to netlify CLI
+const startScreen = `Welcome to netlify CLI
 
 Deploy production sites or apps, straight from the command line
 
-Type **help** to get started
+__Type **help** to get started__
 `;
 
 export function history(state = startScreen.split('\n'), action) {

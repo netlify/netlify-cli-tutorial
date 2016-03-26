@@ -19,7 +19,7 @@ export function npm(names) {
           if (names[1] === 'netlify-cli' && names[2] === '-g') {
             dispatch(install('netlify-cli'));
             dispatch(addHistory(
-              'Great job! Now you have a new netlify command available'
+              'netlify-cli installed globally...'
             ));
             return dispatch(showHelp());
           }
