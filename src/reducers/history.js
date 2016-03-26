@@ -21,10 +21,9 @@ const startScreen = `
                                                   ,,
 Welcome to netlify CLI
 
-Deploy production sites or apps, straight from the command
-line
+Deploy production sites or apps, straight from the command line
 
-Type help to get started
+Type **help** to get started
 `;
 
 export function history(state = startScreen.split('\n'), action) {

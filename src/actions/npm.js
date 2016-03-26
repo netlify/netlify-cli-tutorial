@@ -1,4 +1,5 @@
 import { addHistory } from './base';
+import { showHelp } from './help';
 
 export function install(pkg) {
   var payload = {};
@@ -17,10 +18,10 @@ export function npm(names) {
         case 'i':
           if (names[1] === 'netlify-cli' && names[2] === '-g') {
             dispatch(install('netlify-cli'));
-            return dispatch(addHistory(
-              'Great job! Now you have a new netlify command available',
-              'Try typing \'netlify\' to learn more about what it does'
+            dispatch(addHistory(
+              'Great job! Now you have a new netlify command available'
             ));
+            return dispatch(showHelp());
           }
           if (names[1] === 'netlify-cli' && names[2] !== '-g') {
             return dispatch(addHistory(
@@ -49,7 +50,7 @@ export function npm(names) {
         default:
           dispatch(addHistory(
             'You really didn\'t expect us to implement all of npm in the browser, right?',
-            'How about typing \'npm install netlify-cli -g\'?'
+            'How about typing **npm install netlify-cli -g**?'
           ));
       }
     } else {

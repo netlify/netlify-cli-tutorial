@@ -9,6 +9,8 @@ class Term extends React.Component {
     this.handleInput = this.handleInput.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.bindTermRef = this.bindTermRef.bind(this);
+    this.bindPromptRef = this.bindPromptRef.bind(this);
   }
 
   componentDidMount() {
@@ -46,31 +48,66 @@ class Term extends React.Component {
   }
 
   handleClick(e) {
+    e.preventDefault();
     this.prompt && this.prompt.focus();
+    if (e.target.tagName === 'STRONG') {
+      console.log('Setting cmd from %o', e.target.textContent);
+      this.props.setCmd(e.target.textContent);
+    }
   }
 
   componentDidUpdate() {
     this.term.scrollTop = this.term.scrollHeight;
   }
 
+  format(line) {
+    if (!line) { return {__html: '<br/>'}; }
+    return {
+      __html: line
+        .replace(/\*\*(.+?)\*\*/g, (m, bold) => (
+          `<strong>${bold}</strong>`
+        ))
+        .replace(/__(.+?)__/g, (m, em) => (
+          `<em>${em}</em>`
+        ))
+    };
+  }
+
+  bindTermRef(ref) {
+    this.term = ref;
+  }
+
+  bindPromptRef(ref) {
+    this.prompt = ref;
+  }
+
   render() {
     const { prompt } = this.props;
 
-    return <div className="term" onClick={this.handleClick}>
-      <pre className="term--body" ref={(ref) => this.term = ref}>
+    return <div className="term" onClick={this.handleClick} ref={this.bindTermRef}>
+      <pre className="term--body">
         {this.props.history.map((line, i) => (
-          <div className="term--history" key={i}>{line || <br/>}</div>
+          <div
+              key={i}
+              className="term--history"
+              dangerouslySetInnerHTML={this.format(line)}
+          />
         ))}
         {prompt && <div className="term--current">
-          <span className="term--prompt">{prompt}</span>
+          <span
+              className="term--prompt"
+              dangerouslySetInnerHTML={this.format(prompt)}
+          />
           <input
-              className="term--input"
-              ref={(ref) => this.prompt = ref}
+              className="term--textfield"
+              ref={this.bindPromptRef}
               type="text"
               value={this.props.cmd}
               onKeyDown={this.handleKeyDown}
               onKeyPress={this.handleInput}
           />
+          <span className="term--input">{this.props.cmd}</span>
+          <span className="term--caret"></span>
         </div>}
       </pre>
     </div>;

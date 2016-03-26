@@ -1,5 +1,6 @@
 import { createStore, applyMiddleware, combineReducers, compose } from 'redux';
 import thunkMiddleware from 'redux-thunk';
+import { logMiddleware } from '../middleware/logger';
 import { cmd } from '../reducers/cmd';
 import { cmds } from '../reducers/cmds';
 import { cwd } from '../reducers/cwd';
@@ -8,6 +9,7 @@ import { history } from '../reducers/history';
 import { help } from '../reducers/help';
 import { npm } from '../reducers/npm';
 import { prompt } from '../reducers/prompt';
+import { config } from '../reducers/config';
 
 const reducer = combineReducers({
   cmd,
@@ -17,11 +19,12 @@ const reducer = combineReducers({
   history,
   help,
   npm,
-  prompt
+  prompt,
+  config
 });
 
 const createStoreWithMiddleware = compose(
-  applyMiddleware(thunkMiddleware),
+  applyMiddleware(thunkMiddleware, logMiddleware),
   window.devToolsExtension ? window.devToolsExtension() : (f) => f
 )(createStore);
 
