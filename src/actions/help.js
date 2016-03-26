@@ -49,9 +49,8 @@ const messages = {
   ],
   staticSite: [
     '',
-    '__This is a simple static site. Lets push it to netlify now__',
-    '__Run **netlify deploy** and pick the default settings to__',
-    '__push this site to our global CDN__',
+    '__This directory contains a simple static site. Lets push it to netlify now__',
+    '__Run **netlify deploy** and pick the default settings to push this site to our global CDN__',
     ''
   ],
   jekyllSite: [

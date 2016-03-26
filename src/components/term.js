@@ -113,6 +113,9 @@ https://github.com/netlify/netlify-cli-tutorial
         .replace(/__(.+?)__/g, (m, em) => (
           `<em>${em}</em>`
         ))
+        .replace(/\[\[(.+?)\]\]/g, (m, link) => (
+          `<a href="${link}" target="_blank">${link}</a>`
+        ))
     };
   }
 
