@@ -37,32 +37,33 @@ export function showHelp() {
 const messages = {
   install: [
     '',
-    '__First step is to install netlify\'s command line tool.__',
+    '__First step is to install netlify\'s command line tool__',
     '__Type **npm install netlify-cli -g** to install and get started__',
     ''
   ],
   afterInstall: [
     '',
+    '__Great! Now you have the netlify command available__',
     '__Try typing **netlify** to learn more about what it does__',
     ''
   ],
   staticSite: [
     '',
-    '__This is a simple static site. Lets push it to netlify now.__',
+    '__This is a simple static site. Lets push it to netlify now__',
     '__Run **netlify deploy** and pick the default settings to__',
     '__push this site to our global CDN__',
     ''
   ],
   jekyllSite: [
     '',
-    '__This is a simple jekyll site.__',
+    '__This is a simple jekyll site__',
     '__Lets try to run a build by doing **jekyll build**__',
     ''
   ],
   changeDir: [
     '',
     '__Try changing the current working directory to one of the demo sites__',
-    '__(hint: use the **ls** and **cd** to navigate)__',
+    '__(hint: use **ls** and **cd** to navigate)__',
     ''
   ]
 };

@@ -33,12 +33,34 @@ class Term extends React.Component {
   componentDidMount() {
     this.props.initFilesystem({
       'static-site': {
-        'index.html': '<h1>I am the index</h1>'
+        'index.html': '<h1>Hello, World!</h1>'
       },
       'jekyll-site': {
-        '_config.yml': '---\n\ntitle: My Jekyll Site\n'
+        '_config.yml': '---\n\ntitle: Hello, Jekyll World!\n'
       },
-      'README': 'Hello, World!'
+      'README': `
+# Netlify\'s CLI Tutorial
+
+This is an interactive demonstration of some of the netlify CLI features.
+
+You'll see help messages in __a different color__ and you can click on any
+highlighted block of text to copy those words to the prompt.
+
+If you go through the whole tutorial, you'll learn how to:
+
+* Do a manual deploy of a folder
+* Managing environments
+* Settings up continuous deployment
+* Naming your site
+* Setting up a custom domain
+
+## Run into a bug?
+
+Why not open and issue or fork this tutorial and send us a pull request:
+
+https://github.com/netlify/netlify-cli-tutorial
+
+`
     });
     this.prompt && this.prompt.focus();
   }
@@ -74,6 +96,7 @@ class Term extends React.Component {
 
   componentDidUpdate() {
     this.term.scrollTop = this.term.scrollHeight;
+    this.prompt && this.prompt.focus();
   }
 
   format(line) {

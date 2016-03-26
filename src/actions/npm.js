@@ -1,5 +1,6 @@
-import { addHistory } from './base';
+import { addHistory, updateHistory } from './base';
 import { showHelp } from './help';
+import { hidePrompt, clearPrompt } from './prompt';
 
 export function install(pkg) {
   var payload = {};
@@ -10,6 +11,37 @@ export function install(pkg) {
   };
 }
 
+const spinner = [
+  '/',
+  '-',
+  '\\',
+  '|'
+];
+
+function installNetlify(dispatch) {
+  const spin = (i) => {
+    dispatch(updateHistory(spinner[i % spinner.length]));
+    if (i < 30) {
+      setTimeout((() => spin(i + 1)), 100);
+    } else {
+      dispatch(updateHistory(''));
+      dispatch(install('netlify-cli'));
+      dispatch(addHistory(
+        '/usr/local/bin/netlify -> /usr/local/lib/node_modules/netlify-cli/bin/cli.js',
+        '├── left-pad@0.0.3',
+        '├── isarray@1.0.0',
+        '├── is-positive-integer@1.1.1',
+        '├── babel@6.5.2'
+      ));
+      dispatch(showHelp());
+      dispatch(clearPrompt());
+    }
+  };
+  dispatch(addHistory(spinner[0]));
+  dispatch(hidePrompt());
+  spin(1);
+}
+
 export function npm(names) {
   return (dispatch, getState) => {
     if (names.length) {
@@ -17,11 +49,7 @@ export function npm(names) {
         case 'install':
         case 'i':
           if (names[1] === 'netlify-cli' && names[2] === '-g') {
-            dispatch(install('netlify-cli'));
-            dispatch(addHistory(
-              'netlify-cli installed globally...'
-            ));
-            return dispatch(showHelp());
+            return installNetlify(dispatch);
           }
           if (names[1] === 'netlify-cli' && names[2] !== '-g') {
             return dispatch(addHistory(

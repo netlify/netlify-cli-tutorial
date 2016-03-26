@@ -2,6 +2,80 @@ import { addHistory, updateHistory } from './base';
 import { showHelp } from './help';
 import { setPrompt, clearPrompt, hidePrompt } from './prompt';
 
+export function netlify(names) {
+  return (dispatch, getState) => {
+    const { help, npm, prompt, cwd } = getState();
+
+    if (prompt.handler && prompt.data.setting == 'site') {
+      return configureSite(dispatch, getState(), names[0]);
+    }
+    if (prompt.handler && prompt.data.setting === 'dir') {
+      return configureDir(dispatch, getState(), names[0] || cwd);
+    }
+
+    if (!npm.packages['netlify-cli']) {
+      return commandNotFound(dispatch);
+    }
+
+    if (names.length === 0 || names[1] === 'help') {
+      outputHelp(dispatch);
+      if (!help.netlify) {
+        dispatch(showHelp());
+      }
+      return;
+    }
+
+    switch (names[0]) {
+      case 'deploy':
+        return deploy(dispatch, getState());
+      case 'open':
+        return openSite(dispatch, getState());
+      default:
+        return outputHelp(dispatch);
+    }
+  };
+}
+
+function commandNotFound(dispatch) {
+  dispatch(addHistory(
+    '-bash: netlify: command not found',
+    '',
+    '(hint: make sure to run \'npm install netlify-cli -g\' first)'
+  ));
+}
+
+function outputHelp(dispatch) {
+  dispatch(addHistory(
+'',
+'  Usage: netlify [options] [command]',
+'',
+'    The premium hosting service for modern static websites',
+'',
+'    Read more at https://www.netlify.com/docs/cli',
+'',
+'  Commands:',
+'',
+'    create [options]   Create a new site',
+'    deploy [options]   Push a new deploy to netlify',
+'    update [options]   Updates site attributes',
+'    delete [options]   Delete site',
+'    sites [options]    List your sites',
+'    open [options]     Open site in the webui',
+'    init               Configure continuous deployment',
+'',
+'  Options:',
+'',
+'    -h, --help                 output usage information',
+'    -V, --version              output the version number',
+'    -t --access-token <token>  Override the default Access Token',
+'    -e --env <environment>     Specify an environment',
+''));
+}
+
+function openSite(dispatch, state) {
+  window.open('https://example.netlify.com');
+}
+
 function configureSite(dispatch, state, answer) {
   dispatch(setPrompt('netlify', '? Path to deploy? (current dir) ', {setting: 'dir'}));
 }
@@ -52,58 +126,4 @@ function deploy(dispatch, state) {
         'However, for this demo - try one of the example sites.'
       ));
   }
-}
-
-export function netlify(names) {
-  return (dispatch, getState) => {
-    const { help, npm, prompt, cwd } = getState();
-
-    if (prompt.handler && prompt.data.setting == 'site') {
-      return configureSite(dispatch, getState(), names[0]);
-    }
-    if (prompt.handler && prompt.data.setting === 'dir') {
-      return configureDir(dispatch, getState(), names[0] || cwd);
-    }
-
-    if (!npm.packages['netlify-cli']) {
-      return dispatch(addHistory(
-        '-bash: netlify: command not found',
-        '',
-        '(hint: make sure to run \'npm install netlify-cli -g\' first)'
-      ));
-    }
-
-    if (names.length === 0 || names[1] === 'help') {
-      dispatch(addHistory(
-'',
-'  Usage: netlify [options] [command]',
-'',
-'    The premium hosting service for modern static websites',
-'',
-'    Read more at https://www.netlify.com/docs/cli',
-'',
-'  Commands:',
-'',
-'    create [options]   Create a new site',
-'    deploy [options]   Push a new deploy to netlify',
-'    update [options]   Updates site attributes',
-'    delete [options]   Delete site',
-'    sites [options]    List your sites',
-'    open [options]     Open site in the webui',
-'    init               Configure continuous deployment',
-'',
-'  Options:',
-'',
-'    -h, --help                 output usage information',
-'    -V, --version              output the version number',
-'    -t --access-token <token>  Override the default Access Token',
-'    -e --env <environment>     Specify an environment for the local configuration',
-''));
-      if (!help.netlify) {
-        dispatch(showHelp());
-      }
-    } else if (names[0] === 'deploy') {
-      deploy(dispatch, getState());
-    }
-  };
 }

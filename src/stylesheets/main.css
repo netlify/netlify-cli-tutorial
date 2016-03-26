@@ -1,7 +1,7 @@
 :root {
   --term-background: #1f2727;
-  --term-text: #00c7b7;
-  --term-text-highlight: #0bd452; /* #0bde91 - #1994fa; */
+  --term-text: rgba(255, 255, 255, 0.87); /* #00c7b7; */
+  --term-text-highlight: #00c7b7; /* #0bd452 - #0bde91 - #1994fa; */
   --term-prompt: #00c7b7;
   --term-padding: 5px;
   --term-font-size: 16px;
@@ -37,6 +37,7 @@ body {
 }
 .term--banner {
   line-height: 1;
+  color: var(--term-text-highlight);
 }
 
 .term--title {
@@ -58,9 +59,12 @@ body {
   white-space: pre-wrap;
   font-family: var(--term-font-family);
   strong {
-    font-weight: bold;
-    text-decoration: underline;
+    font-weight: normal;;
+    background: var(--term-text-highlight);
+    color: var(--term-background);
+    /*text-decoration: underline;*/
     cursor: pointer;
+    padding: 0 3px;
   }
   em {
     font-style: normal;
@@ -70,7 +74,7 @@ body {
 }
 
 .term--prompt {
-  color: var(--term-prompt);
+
 }
 .term--textfield {
     overflow: hidden;
@@ -99,7 +103,7 @@ body {
 }
 
 .term--current {
-  display: flex;
+  color: var(--term-text);
 }
 .term--current .term--input,
 .term--current .term--prompt {

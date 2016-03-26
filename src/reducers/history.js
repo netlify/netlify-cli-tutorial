@@ -4,9 +4,9 @@ function toArray(obj) {
   return Array.isArray(obj) ? obj : [obj];
 }
 
-const startScreen = `Welcome to netlify CLI
+const startScreen = `__Welcome to netlify CLI__
 
-Deploy production sites or apps, straight from the command line
+__Deploy production sites or apps, straight from the command line!__
 
 __Type **help** to get started__
 `;
