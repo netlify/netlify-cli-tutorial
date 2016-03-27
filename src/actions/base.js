@@ -7,6 +7,15 @@ export function initFilesystem(files) {
   };
 }
 
+export const FS_ADD = 'FS_ADD';
+
+export function addFile(path, content) {
+  return {
+    type: FS_ADD,
+    payload: {path, content}
+  };
+}
+
 export const HIST_ADD = 'HIST_ADD';
 
 export function addHistory(/* arguments */) {

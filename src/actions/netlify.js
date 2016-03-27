@@ -2,7 +2,7 @@ import Rusha from 'rusha';
 import Auth from '../lib/netlify-auth';
 import API from '../lib/netlify-api';
 import { lookup } from '../lib/filesystem';
-import { addHistory, updateHistory } from './base';
+import { addFile, addHistory, updateHistory } from './base';
 import { showHelp } from './help';
 import { setPrompt, clearPrompt, hidePrompt } from './prompt';
 
@@ -166,6 +166,7 @@ function deployAnimation(dispatch) {
 }
 
 function deploySite(dispatch, state, folder) {
+  const { cwd } = state;
   const sha1 = new Rusha();
   const digests = {};
   const toUpload = {};
@@ -189,13 +190,17 @@ function deploySite(dispatch, state, folder) {
       Promise.all(uploads).then(() => api.site(response.data.subdomain)),
       deployAnimation(dispatch)
     ]).then((results) => {
+      const site = results[0].data;
       dispatch(addHistory(
         '',
         'Your site has beeen deployed to:',
         '',
-        `  [[${results[0].data.url}]]`,
+        `  [[${site.url}]]`,
         ''
       ));
+      dispatch(
+        addFile(`${cwd}/.netlify`, `{"site_id": "${site.id}", "path": "${folder || ''}"}`)
+      );
     });
   });
 }

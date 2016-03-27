@@ -1,5 +1,5 @@
 import expect from 'expect';
-import { initFilesystem } from '../../src/actions/base';
+import { initFilesystem, addFile } from '../../src/actions/base';
 import { files } from '../../src/reducers/files';
 
 describe('files', () => {
@@ -16,6 +16,14 @@ describe('files', () => {
       files(undefined, initFilesystem({'folder': {'README': 'hello'}}))
     ).toEqual(
       {'folder': {'README': 'hello'}}
+    );
+  });
+
+  it('should add a file', () => {
+    expect(
+      files({folder: {'README': 'hello'}}, addFile('folder/.netlify', '{"site_id": "1234"}'))
+    ).toEqual(
+      {folder: {'README': 'hello', '.netlify': '{"site_id": "1234"}'}}
     );
   });
 });
