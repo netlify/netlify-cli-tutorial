@@ -31,6 +31,11 @@ export function netlify(names) {
       return;
     }
 
+    if (names[1] === '--help' && helpTexts[names[0]]) {
+      const text = helpTexts[names[0]].split('\n');
+      return dispatch(addHistory(...text));
+    }
+
     switch (names[0]) {
       case 'deploy':
         return deploy(dispatch, getState());
@@ -41,6 +46,86 @@ export function netlify(names) {
     }
   };
 }
+
+const helpTexts = {
+  create: `
+  Usage: create [options]
+
+  Create a new site
+
+  Options:
+
+    -h, --help                   output usage information
+    -n --name <name>             Set <name>.netlify.com
+    -d --custom-domain [domain]  Set the custom domain for the site
+    -p --password [password]     Set the password for the site
+`,
+  deploy: `
+  Usage: deploy [options]
+
+  Push a new deploy to netlify
+
+  Options:
+
+    -h, --help         output usage information
+    -s --site-id [id]  Deploy to site with <id>
+    -p --path [path]   Path to a folder or zip file to deploy
+    -d --draft         Deploy as a draft without publishing
+`,
+  update: `
+  Usage: update [options]
+
+  Updates site attributes
+
+  Options:
+
+    -h, --help                   output usage information
+    -s --site-id [id]            The site to update
+    -n --name [name]             Set <name>.netlify.com
+    -d --custom-domain [domain]  Set the custom domain for the site
+    -p --password [password]     Set the password for the site
+`,
+  init: `
+  Usage: init [options]
+
+  Configure continuous deployment
+
+  Options:
+
+    -h, --help  output usage information
+`,
+  delete: `
+  Usage: delete [options]
+
+  Delete site
+
+  Options:
+
+    -h, --help         output usage information
+    -s --site-id [id]  The id of the site to delete
+    -y --yes           Don't prompt for confirmation
+`,
+  sites: `
+  Usage: sites [options]
+
+  List your sites
+
+  Options:
+
+    -h, --help  output usage information
+    -g --guest  List sites you have access to as a collaborator
+`,
+  open: `
+  Usage: open [options]
+
+  Open site in the webui
+
+  Options:
+
+    -h, --help         output usage information
+    -s --site-id [id]  The id of the site to open
+`,
+};
 
 function commandNotFound(dispatch) {
   dispatch(addHistory(
@@ -196,6 +281,13 @@ function deploySite(dispatch, state, folder) {
         'Your site has beeen deployed to:',
         '',
         `  [[${site.url}]]`,
+        ''
+      ));
+      dispatch(addHistory(
+        '',
+        '__Awesome! You just deployed your first site to netlify.__',
+        '__Now lets give it a better name. Try **netlify update --help**__',
+        '__to see how that\'s done.__',
         ''
       ));
       dispatch(
