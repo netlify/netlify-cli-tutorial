@@ -2,7 +2,7 @@ import Rusha from 'rusha';
 import Auth from '../lib/netlify-auth';
 import API from '../lib/netlify-api';
 import { lookup } from '../lib/filesystem';
-import { addHistory } from './base';
+import { addHistory, updateHistory } from './base';
 import { showHelp } from './help';
 import { setPrompt, clearPrompt, hidePrompt } from './prompt';
 
@@ -91,35 +91,6 @@ function configureDir(dispatch, state, folder) {
   dispatch(clearPrompt());
   dispatch(addHistory('Deploying folder ' + (folder || cwd)));
   return withAuth(deploySite, dispatch, state, folder);
-  // const showDeploy = (uploaded) => {
-  //   var progress = '[';
-  //   for (var i = 0; i < 40; i++) {
-  //     if (i <= 40 * uploaded / 5) {
-  //       progress += '=';
-  //     } else {
-  //       progress += ' ';
-  //     }
-  //   }
-  //   progress += '] Uploading';
-  //   dispatch(updateHistory(progress));
-  //   if (uploaded == 5) {
-  //     dispatch(addHistory(
-  //       'Awesome! You just deployed your first site to netlify',
-  //       '',
-  //       'Check it out at http://example.netlify.com/',
-  //       ''
-  //     ));
-  //     dispatch(clearPrompt());
-  //   } else {
-  //     var time = Math.random() * 800 + 200;
-  //     setTimeout((() => showDeploy(uploaded + 1)), time);
-  //   }
-  // };
-  // dispatch(hidePrompt());
-  // dispatch(addHistory(
-  //   '[                                        ] Uploading'
-  // ));
-  // showDeploy(0);
 }
 
 function withAuth(fn, dispatch, state, arg) {
@@ -165,6 +136,35 @@ function walkFiles(state, folder, fn)  {
   });
 }
 
+function deployAnimation(dispatch) {
+  return new Promise((resolve, reject) => {
+    const showDeploy = (uploaded) => {
+      var progress = '[';
+      for (var i = 0; i < 40; i++) {
+        if (i <= 40 * uploaded / 5) {
+          progress += '=';
+        } else {
+          progress += ' ';
+        }
+      }
+      progress += '] Uploading';
+      dispatch(updateHistory(progress));
+      if (uploaded == 5) {
+        dispatch(clearPrompt());
+        return resolve();
+      } else {
+        var time = Math.random() * 800 + 200;
+        setTimeout((() => showDeploy(uploaded + 1)), time);
+      }
+    };
+    dispatch(hidePrompt());
+    dispatch(addHistory(
+      '[                                        ] Uploading'
+    ));
+    showDeploy(0);
+  });
+}
+
 function deploySite(dispatch, state, folder) {
   const sha1 = new Rusha();
   const digests = {};
@@ -179,24 +179,23 @@ function deploySite(dispatch, state, folder) {
   api.createSite({
     files: digests
   }).then((response) => {
-    console.log(response);
-    dispatch(addHistory('Uploading files'));
     const uploads = [];
     Object.keys(toUpload).forEach((path) => {
       if (response.data.required.indexOf(digests[path]) > -1) {
         uploads.push(api.uploadFile(response.data.deploy_id, `/${path}`, toUpload[path]));
       }
     });
-    Promise.all(uploads).then((done) => {
-      api.site(response.data.subdomain).then((site) => {
-        dispatch(addHistory(
-          'Your site has beeen deployed to:',
-          '',
-          `  [[${site.data.url}]]`,
-          ''
-        ));
-        dispatch(clearPrompt());
-      });
+    Promise.all([
+      Promise.all(uploads).then(() => api.site(response.data.subdomain)),
+      deployAnimation(dispatch)
+    ]).then((results) => {
+      dispatch(addHistory(
+        '',
+        'Your site has beeen deployed to:',
+        '',
+        `  [[${results[0].data.url}]]`,
+        ''
+      ));
     });
   });
 }

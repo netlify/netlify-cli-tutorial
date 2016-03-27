@@ -58,11 +58,12 @@ body {
   margin: 0 auto;
   white-space: pre-wrap;
   font-family: var(--term-font-family);
-  strong {
+  strong,
+  a, a:visited, a:hover, a:active {
     font-weight: normal;;
     background: var(--term-text-highlight);
     color: var(--term-background);
-    /*text-decoration: underline;*/
+    text-decoration: none;
     cursor: pointer;
     padding: 0 3px;
   }

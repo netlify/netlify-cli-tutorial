@@ -89,7 +89,6 @@ https://github.com/netlify/netlify-cli-tutorial
   }
 
   handleClick(e) {
-    e.preventDefault();
     this.prompt && this.prompt.focus();
     if (e.target.tagName === 'STRONG') {
       this.props.setCmd(e.target.textContent);
