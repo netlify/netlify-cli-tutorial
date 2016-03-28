@@ -51,7 +51,8 @@ module.exports = {
 
   context: path.join(__dirname, 'src'),
   entry: {
-    app: './index'
+    app: './index',
+    admin: './admin'
   },
   output: {
     path: path.join(__dirname, 'dist'),

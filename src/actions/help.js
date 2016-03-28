@@ -15,7 +15,7 @@ export function showHelp() {
       return helpMessage(dispatch, 'install');
     }
 
-    if (!help.npm) {
+    if (!help.seen.npm) {
       dispatch(helpSeen('npm'));
       return helpMessage(dispatch, 'afterInstall');
     }

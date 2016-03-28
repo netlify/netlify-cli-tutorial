@@ -110,3 +110,57 @@ body {
 .term--current .term--prompt {
 
 }
+
+.admin {
+  font-family: var(--term-font-family);
+  color: var(--term-text);
+}
+.admin-header {
+  border-bottom: 2px solid var(--term-text-highlight);
+  color: var(--term-text);
+  padding: 0.5em 1em;
+}
+.admin-header a,
+.admin-header a:active,
+.admin-header a:link,
+.admin-header a:hover {
+  color: var(--term-text-highlight);
+  text-decoration: none;
+}
+.admin-header a:hover {
+  text-decoration: underline;
+}
+.admin-title {
+  font-weight: normal;
+}
+.admin-sessions {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 1em;
+}
+.admin-session {
+  flex: 0 0 25%;
+  display: block;
+}
+.admin-session a,
+.admin-session a:active,
+.admin-session a:link,
+.admin-session a:hover {
+  display: block;
+  border: 2px solid var(--term-text-highlight);
+  padding: 1em;
+  margin-right: 1em;
+  margin-bottom: 1em;
+  color: var(--term-text-highlight);
+  text-decoration: none;
+}
+.admin-session a:hover {
+  text-decoration: underline;
+}
+.admin-loader {
+  font-size: 30px;
+  text-align: center;
+  margin-top:6em;
+}

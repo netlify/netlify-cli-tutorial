@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { initFilesystem, appendCmd, setCmd } from '../actions/base';
 import { run, autocomplete, popHistory } from '../actions/run';
+import { setConfig } from '../actions/config';
 
 const banner = `
                                ::   :::    :::::
@@ -67,7 +68,20 @@ https://github.com/netlify/netlify-cli-tutorial
     this.prompt && this.prompt.focus();
   }
 
+  componentDidUpdate() {
+    this.term.scrollTop = this.term.scrollHeight;
+    this.prompt && this.prompt.focus();
+  }
+
+  startRecording() {
+    if (!this.props.recording) {
+      this.props.setConfig({recording: true});
+    }
+  }
+
   handleInput(e) {
+    console.log('Start input: %o', e)
+    this.startRecording();
     if (e.key === 'Enter') {
       return this.props.run();
     }
@@ -78,13 +92,18 @@ https://github.com/netlify/netlify-cli-tutorial
     switch (e.keyCode) {
       case 8:
         const cmd = this.props.cmd.slice(0, -1);
-        return this.props.setCmd(cmd);
+        this.startRecording();
+        this.props.setCmd(cmd);
+        break;
       case 9:
         e.preventDefault();
         this.props.autocomplete();
+        this.startRecording();
         break;
       case 38:
+        this.startRecording();
         this.props.popHistory();
+        break;
     }
   }
 
@@ -93,11 +112,6 @@ https://github.com/netlify/netlify-cli-tutorial
     if (e.target.tagName === 'STRONG') {
       this.props.setCmd(e.target.textContent);
     }
-  }
-
-  componentDidUpdate() {
-    this.term.scrollTop = this.term.scrollHeight;
-    this.prompt && this.prompt.focus();
   }
 
   format(line) {
@@ -162,12 +176,13 @@ https://github.com/netlify/netlify-cli-tutorial
 }
 
 function mapStateToProps(state) {
-  const { cmd, files, history, prompt } = state;
+  const { cmd, files, history, prompt, config } = state;
   return {
     cmd,
     files,
     history,
-    prompt: prompt.text
+    prompt: prompt.text,
+    recording: config.recording
   };
 }
 
@@ -178,6 +193,7 @@ function mapDispatchToProps(dispatch) {
     run: (cmd) => dispatch(run(cmd)),
     autocomplete: () => dispatch(autocomplete()),
     popHistory: () => dispatch(popHistory()),
+    setConfig: (settings) => dispatch(setConfig(settings)),
     initFilesystem: (files) => dispatch(initFilesystem(files))
   };
 }

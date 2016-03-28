@@ -25,7 +25,7 @@ export function netlify(names) {
 
     if (names.length === 0 || names[1] === 'help') {
       outputHelp(dispatch);
-      if (!help.netlify) {
+      if (!help.seen.netlify) {
         dispatch(showHelp());
       }
       return;
