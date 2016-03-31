@@ -4,11 +4,7 @@ function toArray(obj) {
   return Array.isArray(obj) ? obj : [obj];
 }
 
-export const startScreen = `__Welcome to netlify CLI__
-
-__Deploy production sites or apps, straight from the command line!__
-
-__Type **help** to get started__
+export const startScreen = `__Type **help** to get started__
 `;
 
 export function history(state = startScreen.split('\n'), action) {

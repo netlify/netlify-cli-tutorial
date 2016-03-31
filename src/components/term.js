@@ -4,23 +4,6 @@ import { initFilesystem, appendCmd, setCmd } from '../actions/base';
 import { run, autocomplete, popHistory } from '../actions/run';
 import { setConfig } from '../actions/config';
 
-const banner = `
-                               ::   :::    :::::
-                        :::    ::         :::
-                        :::    ::         :::
-:: ::::::    ,::::::  ::::::,  ::   ::: ,::::::  :::    :::
-:::   :::   :::   :::   :::    ::   :::   :::    :::    :::
-::     ::: :::     ::   :::    ::   :::   :::     ::,  :::
-::     ::: ::::::::::   :::    ::   :::   :::     ,::  ::,
-::     ::: ::,          :::    ::   :::   :::      :::,::
-::     ::: ,::          :::    ::   :::   :::       ::::
-::     :::  :::::::::   :::::  ::   :::   :::       ::::
-,,     ,,,     :::,       ::,  ,,   ,,,   ,,,        ::
-                                                    :::
-                                                 ,::::
-                                                  ,,
-`;
-
 class Term extends React.Component {
   constructor(props) {
     super(props);
@@ -69,6 +52,10 @@ https://github.com/netlify/netlify-cli-tutorial
   }
 
   componentDidUpdate() {
+    const { maxHeight } = this.props;
+    console.log('maxHeight: %s scrollHeight: %s', maxHeight, this.term.scrollHeight);
+    const height = this.term.scrollHeight > maxHeight ? maxHeight : this.term.scrollHeight;
+    this.term.style.height = `${height}px`;
     this.term.scrollTop = this.term.scrollHeight;
     this.prompt && this.prompt.focus();
   }
@@ -80,7 +67,6 @@ https://github.com/netlify/netlify-cli-tutorial
   }
 
   handleInput(e) {
-    console.log('Start input: %o', e)
     this.startRecording();
     if (e.key === 'Enter') {
       return this.props.run();
@@ -146,7 +132,6 @@ https://github.com/netlify/netlify-cli-tutorial
 
     return <div className="term" onClick={this.handleClick} ref={this.bindTermRef}>
       <pre className="term--body">
-        <div className="term--banner">{banner}</div>
         {this.props.history.map((line, i) => (
           <div
               key={i}
@@ -186,7 +171,7 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch, ownProps) {
   return {
     setCmd: (cmd) => dispatch(setCmd(cmd)),
     appendCmd: (char) => dispatch(appendCmd(char)),
