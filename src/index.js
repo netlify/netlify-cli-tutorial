@@ -29,7 +29,7 @@ if (window.$) {
     (_, el) => {
       render((
         <Provider store={store}>
-          <Term maxHeight={window.$(el).data('maxHeight') || 800}/>
+          <Term maxHeight={window.$(el).data('maxHeight') || 600}/>
         </Provider>
       ), el);
     }
