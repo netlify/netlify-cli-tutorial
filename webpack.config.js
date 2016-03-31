@@ -43,6 +43,9 @@ module.exports = {
   ],
 
   plugins: [
+    new webpack.DefinePlugin({
+      'process.env': { NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development') }
+    }),
     new ExtractTextPlugin('style/app.css', {allChunks: true}),
     new webpack.ProvidePlugin({
       'fetch': 'imports?this=>global!exports?global.fetch!whatwg-fetch'
