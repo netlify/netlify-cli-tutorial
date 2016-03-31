@@ -53,7 +53,6 @@ https://github.com/netlify/netlify-cli-tutorial
 
   componentDidUpdate() {
     const { maxHeight } = this.props;
-    console.log('maxHeight: %s scrollHeight: %s', maxHeight, this.term.scrollHeight);
     const height = this.term.scrollHeight > maxHeight ? maxHeight : this.term.scrollHeight;
     this.term.style.height = `${height}px`;
     this.term.scrollTop = this.term.scrollHeight;
