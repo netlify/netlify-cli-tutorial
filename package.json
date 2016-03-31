@@ -11,7 +11,7 @@
   },
   "author": "",
   "license": "ISC",
-  "devDependencies": {
+  "dependencies": {
     "autoprefixer": "^6.3.3",
     "babel-core": "^6.5.1",
     "babel-eslint": "^4.1.8",
