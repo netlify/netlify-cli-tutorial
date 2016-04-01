@@ -21,7 +21,7 @@ const store = configureStore();
 
 store.dispatch(setConfig({
   session: guid(),
-  logger: 'http://localhost:8800' //window.TUTORIAL_LOG_ENDPOINT
+  logger: window.TUTORIAL_LOG_ENDPOINT
 }));
 
 if (window.$) {
