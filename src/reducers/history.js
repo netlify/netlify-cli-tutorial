@@ -4,7 +4,7 @@ function toArray(obj) {
   return Array.isArray(obj) ? obj : [obj];
 }
 
-export const startScreen = `__Type **help** to get started__
+export const startScreen = `__Type **help** to see how easy using netlify is__
 `;
 
 export function history(state = startScreen.split('\n'), action) {

@@ -7,7 +7,7 @@ import { setConfig } from '../actions/config';
 class Term extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {selected: 0}
+    this.state = {selected: 0};
     this.handleInput = this.handleInput.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleClick = this.handleClick.bind(this);
