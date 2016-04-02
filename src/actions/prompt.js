@@ -1,11 +1,14 @@
+export function setOptions(handler, options) {
+  return {
+    type: 'PROMPT_SET',
+    payload: {handler, options}
+  };
+}
+
 export function setPrompt(handler, text, data) {
   return {
     type: 'PROMPT_SET',
-    payload: {
-      handler,
-      text,
-      data
-    }
+    payload: {handler, text, data}
   };
 }
 

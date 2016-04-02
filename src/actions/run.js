@@ -57,13 +57,15 @@ export function run() {
   return (dispatch, getState) => {
     const { cmd, prompt } = getState();
 
-    dispatch(addHistory(prompt.text + cmd));
+    if (!prompt.options) {
+      dispatch(addHistory(prompt.text + cmd));
+    }
     dispatch(clearCmd());
     dispatch(pushCmd(cmd));
     const words = cmd.split(' ').filter((w) => w);
     const fn = commands[prompt.handler || words[0]];
     if (fn) {
-      dispatch(fn(words.slice(1)));
+      dispatch(fn(prompt.handler ? words : words.slice(1)));
     } else {
       dispatch(unkownCommand(words[0]));
     }

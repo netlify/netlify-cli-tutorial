@@ -37,8 +37,8 @@ export default class NetlifyApi {
       });
   }
 
-  site(name) {
-    return this.request(`/sites/${name}.${this.siteDomain}`);
+  site(id) {
+    return this.request(`/sites/${id}`);
   }
 
   sites({ page, per_page, guest }) {
@@ -69,6 +69,10 @@ export default class NetlifyApi {
 
   createSite(attributes = {}) {
     return this.request('/sites', {method: 'POST', body: JSON.stringify(attributes)});
+  }
+
+  createDeploy(siteId, attributes = {}) {
+    return this.request(`/sites/${siteId}/deploys`, {method: 'POST', body: JSON.stringify(attributes)});
   }
 
   updateSite(id, updates) {

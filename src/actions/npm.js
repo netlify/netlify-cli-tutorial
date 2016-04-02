@@ -21,7 +21,7 @@ const spinner = [
 function installNetlify(dispatch) {
   const spin = (i) => {
     dispatch(updateHistory(spinner[i % spinner.length]));
-    if (i < 30) {
+    if (i < 20) {
       setTimeout((() => spin(i + 1)), 100);
     } else {
       dispatch(updateHistory(''));

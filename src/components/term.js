@@ -7,6 +7,7 @@ import { setConfig } from '../actions/config';
 class Term extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {selected: 0}
     this.handleInput = this.handleInput.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleClick = this.handleClick.bind(this);
@@ -68,26 +69,45 @@ https://github.com/netlify/netlify-cli-tutorial
   handleInput(e) {
     this.startRecording();
     if (e.key === 'Enter') {
+      if (this.props.options) {
+        this.props.setCmd(this.props.options[this.state.selected]);
+        this.setState({selected: 0});
+      }
       return this.props.run();
     }
     this.props.appendCmd(e.key);
   }
 
   handleKeyDown(e) {
+    this.startRecording();
     switch (e.keyCode) {
       case 8:
         const cmd = this.props.cmd.slice(0, -1);
-        this.startRecording();
         this.props.setCmd(cmd);
         break;
       case 9:
         e.preventDefault();
         this.props.autocomplete();
-        this.startRecording();
         break;
       case 38:
-        this.startRecording();
-        this.props.popHistory();
+        e.preventDefault();
+        if (this.props.options) {
+          this.setState({
+            selected: this.state.selected > 0 ? this.state.selected - 1 : this.props.options.length - 1
+          });
+        } else {
+          this.props.popHistory();
+        }
+        break;
+      case 40:
+        e.preventDefault();
+        if (this.props.options) {
+          this.setState({
+            selected: (this.state.selected + 1) % this.props.options.length
+          });
+        } else {
+          this.props.popHistory();
+        }
         break;
     }
   }
@@ -97,6 +117,12 @@ https://github.com/netlify/netlify-cli-tutorial
     if (e.target.tagName === 'STRONG') {
       this.props.setCmd(e.target.textContent);
     }
+  }
+
+  handleSelectOption(i) {
+    this.props.setCmd(this.props.options[i]);
+    this.props.run();
+    this.setState({selected: 0});
   }
 
   format(line) {
@@ -126,8 +152,8 @@ https://github.com/netlify/netlify-cli-tutorial
   }
 
   render() {
-    const { prompt } = this.props;
-
+    const { prompt, options } = this.props;
+    const { selected } = this.state;
 
     return <div className="term" onClick={this.handleClick} ref={this.bindTermRef}>
       <pre className="term--body">
@@ -143,17 +169,24 @@ https://github.com/netlify/netlify-cli-tutorial
               className="term--prompt"
               dangerouslySetInnerHTML={this.format(prompt)}
           />
-          <input
-              className="term--textfield"
-              ref={this.bindPromptRef}
-              type="text"
-              value={this.props.cmd}
-              onKeyDown={this.handleKeyDown}
-              onKeyPress={this.handleInput}
-          />
           <span className="term--input">{this.props.cmd}</span>
           <span className="term--caret"></span>
         </div>}
+        {options && <div className="term--current">
+          {options.map((option, i) => (
+            <div key={i} onClick={() => this.handleSelectOption(i, option)}>
+              {i === selected ? <strong>{option}</strong> : option}
+            </div>
+          ))}
+        </div>}
+        <input
+            className="term--textfield"
+            ref={this.bindPromptRef}
+            type="text"
+            value={this.props.cmd}
+            onKeyDown={this.handleKeyDown}
+            onKeyPress={this.handleInput}
+        />
       </pre>
     </div>;
   }
@@ -166,6 +199,7 @@ function mapStateToProps(state) {
     files,
     history,
     prompt: prompt.text,
+    options: prompt.options,
     recording: config.recording
   };
 }
