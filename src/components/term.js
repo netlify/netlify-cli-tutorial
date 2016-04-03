@@ -9,7 +9,7 @@ class Term extends React.Component {
     super(props);
     this.state = {selected: 0};
     this.handleInput = this.handleInput.bind(this);
-    this.handleKeyUp = this.handleKeyUp.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.bindTermRef = this.bindTermRef.bind(this);
     this.bindPromptRef = this.bindPromptRef.bind(this);
@@ -78,7 +78,7 @@ https://github.com/netlify/netlify-cli-tutorial
     this.props.appendCmd(e.key);
   }
 
-  handleKeyUp(e) {
+  handleKeyDown(e) {
     this.startRecording();
     switch (e.keyCode) {
       case 8:
@@ -184,7 +184,7 @@ https://github.com/netlify/netlify-cli-tutorial
             ref={this.bindPromptRef}
             type="text"
             value={this.props.cmd}
-            onKeyUp={this.handleKeyUp}
+            onKeyDown={this.handleKeyDown}
             onKeyPress={this.handleInput}
         />
       </pre>
