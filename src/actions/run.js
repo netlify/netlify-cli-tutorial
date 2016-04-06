@@ -63,6 +63,9 @@ export function run() {
     }
     dispatch(clearCmd());
     dispatch(pushCmd(cmd));
+    if (cmd == '') {
+      return;
+    }
     const words = cmd.split(' ').filter((w) => w);
     const fn = commands[prompt.handler || words[0]];
     if (fn) {
