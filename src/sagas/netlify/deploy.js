@@ -1,10 +1,10 @@
 import Rusha from 'rusha';
 import { call, take, put, fork, join, select } from 'redux-saga/effects';
-import { walkFiles } from '../../lib/filesystem';
+import { walkFiles, lookup } from '../../lib/filesystem';
 import { addFile, addHistory } from '../../actions/base';
 import { helpSeen } from '../../actions/help';
 import { setPrompt, clearPrompt, hidePrompt } from '../../actions/prompt';
-import { getFirstDeploySeen, getFiles, getCwd, getConf } from './selectors';
+import { getFirstDeploySeen, getFiles, getCwd, getConf } from '../selectors';
 import { authenticate } from './authentication';
 import { deployAnimation } from './animations';
 
@@ -22,7 +22,7 @@ function* configureDeploy() {
   yield put(setPrompt('netlify', '? Path to deploy? (current dir) '));
   const pathResult = yield take('NETLIFY');
   const conf = {path: pathResult.payload[0], siteId: null};
-  if (cwd === 'static-site' && conf.path) {
+  if (cwd === '/static-site' && conf.path) {
     yield put(addHistory(
       '',
       '__To deploy the static-site folder, you really just want to pick the \'Current dir\' option__',
@@ -30,7 +30,7 @@ function* configureDeploy() {
     ));
     return;
   }
-  if (cwd === 'jekyll-site' && !(conf.path || '').match(/^\/?_site\/?$/)) {
+  if (cwd === '/jekyll-site' && !(conf.path || '').match(/^\/?_site\/?$/)) {
     yield put(addHistory(
       '',
       '__The jekyll site will build it\'s output to the \'_site\' folder when you run \'jekyll build\'__',
@@ -51,13 +51,23 @@ function* createSite(api) {
 export function* deploy() {
   const files = yield select(getFiles);
   const cwd = yield select(getCwd);
-  if (cwd === '' || ['static-site', 'jekyll-site'].indexOf(cwd) === -1) {
+  if (cwd === '' || ['/static-site', '/jekyll-site'].indexOf(cwd) === -1) {
     return yield put(addHistory(
       '',
       '__The real netlify CLI will let you push just about anything to our CDN__',
       '__However, for this demo - try one of the example sites.__',
       ''
     ));
+  }
+
+  if (cwd == '/jekyll-site') {
+    if (!lookup(files, cwd, '_site')) {
+      return yield put(addHistory(
+        '',
+        '__Make sure your run **jekyll build** to generate the _site folder before your deploy__',
+        ''
+      ));
+    }
   }
 
   let conf = yield select(getConf);
@@ -88,8 +98,9 @@ export function* deploy() {
   const digests = {};
   const toUpload = {};
   walkFiles(files, cwd, conf.path, (path, content) => {
-    digests[path] = sha1.digest(content);
-    toUpload[path] = content;
+    const publicPath = path.replace(new RegExp(`${conf.path}`), '').replace(/\/+/, '/');
+    digests[publicPath] = sha1.digest(content);
+    toUpload[publicPath] = content;
   });
   yield put(hidePrompt());
   yield put(addHistory('Analyzing folder'));
@@ -97,7 +108,7 @@ export function* deploy() {
   const uploads = [];
   Object.keys(toUpload).forEach((path) => {
     if (deployResult.data.required.indexOf(digests[path]) > -1) {
-      uploads.push([deployResult.data.deploy_id, `/${path}`, toUpload[path]]);
+      uploads.push([deployResult.data.id, `/${path}`, toUpload[path]]);
     }
   });
   const animation = yield fork(deployAnimation);

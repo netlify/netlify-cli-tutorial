@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { initFilesystem, appendCmd, setCmd } from '../actions/base';
+import { root } from '../lib/folders';
 import { run, autocomplete, popHistory } from '../actions/run';
 import { setConfig } from '../actions/config';
 
@@ -16,39 +17,7 @@ class Term extends React.Component {
   }
 
   componentDidMount() {
-    this.props.initFilesystem({
-      'static-site': {
-        'index.html': '<h1>Hello, World!</h1>'
-      },
-      'jekyll-site': {
-        '_config.yml': '---\n\ntitle: Hello, Jekyll World!\n'
-      },
-      'README': `
-# Netlify\'s CLI Tutorial
-
-This is an interactive demonstration of some of the netlify CLI features.
-
-You'll see help messages in __a different color__ and you can click on any
-__**highlighted block**__ to copy those words to the prompt.
-
-If you go through the whole tutorial, you'll learn how to:
-
-* Do a manual deploy of a site folder
-* Manage environments
-* Password protect your staging site
-* Set up continuous deployment
-* Name your site
-* Configure a custom domain
-
-## Run into a bug?
-
-Great! Help us squash it! Open an issue or fork this tutorial and send us a
-pull request:
-
-https://github.com/netlify/netlify-cli-tutorial
-
-`
-    });
+    this.props.initFilesystem(root);
     this.prompt && this.prompt.focus();
   }
 

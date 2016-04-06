@@ -7,8 +7,9 @@ import { clear } from './clear';
 import { showHelp } from './help';
 import { npm } from './npm';
 import { netlify } from './netlify';
+import { jekyll } from './jekyll';
 
-const commands = {ls, cd, cat, help: showHelp, clear, npm, netlify};
+const commands = {ls, cd, cat, help: showHelp, clear, npm, netlify, jekyll};
 
 export function unkownCommand(cmd) {
   return addHistory(`-bash: ${cmd}: command not found`);

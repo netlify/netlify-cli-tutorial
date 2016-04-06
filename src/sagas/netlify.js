@@ -2,9 +2,9 @@ import { take, put, select } from 'redux-saga/effects';
 import { addHistory } from '../actions/base';
 import { showHelp } from '../actions/help';
 import { helpTexts, notFound } from './netlify/help';
-import { getNetlifyCmd, getHelpSeen } from './netlify/selectors';
+import { getNetlifyCmd, getHelpSeen } from './selectors';
 import { deploy } from './netlify/deploy';
-import { update } from './netlify/open';
+import { update } from './netlify/update';
 import { open } from './netlify/open';
 
 export default function* netlifySaga() {
@@ -20,7 +20,7 @@ export default function* netlifySaga() {
     if (action.payload.length === 0) {
       yield put(addHistory(helpTexts.usage));
       const helpSeen = yield select(getHelpSeen);
-      if (!helpSeen) {
+      if (!helpSeen.netlify) {
         yield put(showHelp());
       }
       continue;

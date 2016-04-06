@@ -1,11 +1,11 @@
-import { lookup } from '../../lib/filesystem';
+import { lookup } from '../lib/filesystem';
 
 export function getNetlifyCmd(state) {
   return state.npm.packages && state.npm.packages['netlify-cli'];
 }
 
 export function getHelpSeen(state) {
-  return state.help.seen && state.help.seen.netlify;
+  return state.help.seen;
 }
 
 export function getFirstDeploySeen(state) {

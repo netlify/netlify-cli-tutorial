@@ -8,6 +8,7 @@ export function ls(names) {
     if (names.length) {
       for (var i = 0; i < names.length; i++) {
         const file = lookup(files, cwd, names[i]);
+        console.log('found file: %o', file);
         if (typeof file === 'object') {
           output(Object.keys(file).join(' '));
         } else if (file) {

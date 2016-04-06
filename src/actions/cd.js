@@ -13,7 +13,7 @@ export function cd(names) {
 
     const dir = lookup(files, cwd, names[0]);
     if (typeof dir === 'object') {
-      dispatch(setCwd(names[0]));
+      dispatch(setCwd(cwd.split('/').concat(names[0]).join('/')));
       if (!help[names[0]])  {
         dispatch(showHelp());
       }

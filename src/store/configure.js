@@ -12,6 +12,7 @@ import { npm } from '../reducers/npm';
 import { prompt } from '../reducers/prompt';
 import { config } from '../reducers/config';
 import netlifySaga from '../sagas/netlify';
+import jekyllSaga from '../sagas/jekyll';
 
 const reducer = combineReducers({
   cmd,
@@ -25,7 +26,7 @@ const reducer = combineReducers({
   config
 });
 
-const sagaMiddleware = createSagaMiddleware(netlifySaga);
+const sagaMiddleware = createSagaMiddleware(netlifySaga, jekyllSaga);
 const createStoreWithMiddleware = compose(
   applyMiddleware(thunkMiddleware, sagaMiddleware, logMiddleware),
   window.devToolsExtension ? window.devToolsExtension() : (f) => f

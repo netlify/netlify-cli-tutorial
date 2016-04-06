@@ -2,7 +2,7 @@ import { call, put } from 'redux-saga/effects';
 import { addHistory, updateHistory } from '../../actions/base';
 import { hidePrompt } from '../../actions/prompt';
 
-function randomWait() {
+export function randomWait() {
   return new Promise((resolve) => {
     setTimeout(resolve, Math.random() * 800 + 200);
   });

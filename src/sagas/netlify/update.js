@@ -1,6 +1,6 @@
 import { select, put } from 'redux-saga/effects';
 import { addHistory } from '../../actions/base';
-import { getConf } from './selectors';
+import { getConf } from '../selectors';
 //import { authenticate } from './authentication';
 import { noConfig } from './help';
 
