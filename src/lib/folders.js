@@ -15,11 +15,6 @@ export const jekyllSite = {
   }
 };
 
-export const root = {
-  'static-site': staticSite.v1,
-  'jekyll-site': jekyllSite.v1,
-  'README': README
-};
 
 export const README =  `
 # Netlify\'s CLI Tutorial
@@ -46,3 +41,9 @@ pull request:
 https://github.com/netlify/netlify-cli-tutorial
 
 `;
+
+export const root = {
+  'static-site': staticSite.v1,
+  'jekyll-site': jekyllSite.v1,
+  'README': README
+};
