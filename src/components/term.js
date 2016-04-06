@@ -155,39 +155,41 @@ https://github.com/netlify/netlify-cli-tutorial
     const { prompt, options } = this.props;
     const { selected } = this.state;
 
-    return <div className="term" onClick={this.handleClick} ref={this.bindTermRef}>
-      <pre className="term--body">
-        {this.props.history.map((line, i) => (
-          <div
-              key={i}
-              className="term--history"
-              dangerouslySetInnerHTML={this.format(line)}
-          />
-        ))}
-        {prompt && <div className="term--current">
-          <span
-              className="term--prompt"
-              dangerouslySetInnerHTML={this.format(prompt)}
-          />
-          <span className="term--input">{this.props.cmd}</span>
-          <span className="term--caret"></span>
-        </div>}
-        {options && <div className="term--current">
-          {options.map((option, i) => (
-            <div key={i} onClick={() => this.handleSelectOption(i, option)}>
-              {i === selected ? <strong>{option}</strong> : option}
-            </div>
+    return <div>
+      <div className="term" onClick={this.handleClick} ref={this.bindTermRef}>
+        <pre className="term--body">
+          {this.props.history.map((line, i) => (
+            <div
+                key={i}
+                className="term--history"
+                dangerouslySetInnerHTML={this.format(line)}
+            />
           ))}
-        </div>}
-        <input
-            className="term--textfield"
-            ref={this.bindPromptRef}
-            type="text"
-            value={this.props.cmd}
-            onKeyDown={this.handleKeyDown}
-            onKeyPress={this.handleInput}
-        />
-      </pre>
+          {prompt && <div className="term--current">
+            <span
+                className="term--prompt"
+                dangerouslySetInnerHTML={this.format(prompt)}
+            />
+            <span className="term--input">{this.props.cmd}</span>
+            <span className="term--caret"></span>
+          </div>}
+          {options && <div className="term--current">
+            {options.map((option, i) => (
+              <div key={i} onClick={() => this.handleSelectOption(i, option)}>
+                {i === selected ? <strong>{option}</strong> : option}
+              </div>
+            ))}
+          </div>}
+        </pre>
+      </div>
+      <input
+          className="term--textfield"
+          ref={this.bindPromptRef}
+          type="text"
+          value={this.props.cmd}
+          onKeyDown={this.handleKeyDown}
+          onKeyPress={this.handleInput}
+      />
     </div>;
   }
 }

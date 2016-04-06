@@ -81,9 +81,9 @@ body {
     overflow: hidden;
     width: 1px;
     height: 1px;
-    margin-left: -1000px;
-    position: absolute;
-    bottom: 0;
+    opacity: 0;
+    position: fixed;
+    top: 0;
     left: 0;
 }
 .term--caret {
