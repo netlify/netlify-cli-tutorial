@@ -21,4 +21,10 @@ export function* build() {
 
   yield put(addFile('jekyll-site/_site', jekyllSite._site));
   yield put(clearPrompt());
+  yield put(addHistory(
+    '',
+    '__Awesome - lets do a manual deploy of the _site folder to netlify now__',
+    '__Use the **netlife deploy** command to deploy a new site__',
+    ''
+  ));
 }
