@@ -86,6 +86,15 @@ export function* deploy() {
     yield put(addHistory('Creating site...'));
     yield deployAnimation();
     yield put(addHistory('Congratulations - your site is live!'));
+
+    yield put(addHistory(
+      '',
+      '__Since you didn\'t authenticate, we just faked this deploy, but this is really how easy it is to get a new site up on netlify__',
+      ''
+    ));
+
+    yield put(clearPrompt);
+    return;
   }
   if (!conf.site_id) {
     try {
