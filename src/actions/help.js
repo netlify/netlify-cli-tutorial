@@ -21,10 +21,10 @@ export function showHelp() {
     }
 
     switch (cwd) {
-      case 'static-site':
+      case '/static-site':
         dispatch(helpSeen(cwd));
         return helpMessage(dispatch, 'staticSite');
-      case 'jekyll-site':
+      case '/jekyll-site':
         dispatch(helpSeen(cwd));
         return helpMessage(dispatch, 'jekyllSite');
       default:
