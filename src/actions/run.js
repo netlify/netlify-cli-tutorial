@@ -63,7 +63,7 @@ export function run() {
     }
     dispatch(clearCmd());
     dispatch(pushCmd(cmd));
-    if (cmd == '') {
+    if (cmd == '' && !prompt.handler) {
       return;
     }
     const words = cmd.split(' ').filter((w) => w);

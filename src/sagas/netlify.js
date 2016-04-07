@@ -23,10 +23,7 @@ export default function* netlifySaga() {
 
     if (action.payload.length === 0) {
       yield put(addHistory(helpTexts.usage));
-      const helpSeen = yield select(getHelpSeen);
-      if (!helpSeen.netlify) {
-        yield put(showHelp());
-      }
+      yield put(showHelp());
       continue;
     }
 
