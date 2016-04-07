@@ -1,13 +1,17 @@
 import { take, put, select } from 'redux-saga/effects';
 import { addHistory } from '../actions/base';
 import { helpSeen } from '../actions/help';
-import { getCwd, getHelpSeen } from './selectors';
+import { getCwd, getHelpSeen, getPlayback } from './selectors';
 import { helpTexts } from './jekyll/help';
 import { build } from './jekyll/build';
 
 export default function* jekyllSaga() {
   while (true) {
     const action = yield take('JEKYLL');
+
+    const playback = yield select(getPlayback);
+    if (playback) { continue; }
+
     const cwd    = yield select(getCwd);
 
     if (cwd !== '/jekyll-site') {

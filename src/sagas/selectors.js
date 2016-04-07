@@ -8,6 +8,10 @@ export function getHelpSeen(state) {
   return state.help.seen;
 }
 
+export function getPlayback(state) {
+  return state.config && state.config.playback;
+}
+
 export function getFirstDeploySeen(state) {
   return state.help.seen && state.help.seen.firstDeploy;
 }
