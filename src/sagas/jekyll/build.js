@@ -24,7 +24,7 @@ export function* build() {
   yield put(addHistory(
     '',
     '__Awesome - lets do a manual deploy of the _site folder to netlify now__',
-    '__Use the **netlife deploy** command to deploy a new site__',
+    '__Use the **netlify deploy** command to deploy a new site__',
     ''
   ));
 }
