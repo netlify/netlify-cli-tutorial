@@ -54,9 +54,23 @@ export function popHistory() {
   };
 }
 
+let globalCallbackCalled = false;
+const triggerGlobalCallback = window.terminalCallback ? function() {
+  if (globalCallbackCalled) { return; }
+
+  globalCallbackCalled = true;
+  window.terminalCallback();
+} : function() {};
+
+const trackCmd = window.ga ? function(cmd) {
+  window.ga('send', 'event', 'terminal', 'cmd', `CMD ${cmd}`);
+} : function() {};
+
 export function run() {
   return (dispatch, getState) => {
     const { cmd, prompt } = getState();
+
+    triggerGlobalCallback();
 
     if (!prompt.options) {
       dispatch(addHistory(prompt.text + cmd));
@@ -69,6 +83,7 @@ export function run() {
     const words = cmd.split(' ').filter((w) => w);
     const fn = commands[prompt.handler || words[0]];
     if (fn) {
+      trackCmd(prompt.handler ? prompt.handler : words[0]);
       dispatch(fn(prompt.handler ? words : words.slice(1)));
     } else {
       dispatch(unkownCommand(words[0]));
