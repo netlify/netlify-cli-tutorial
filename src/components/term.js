@@ -163,6 +163,9 @@ class Term extends React.Component {
           onKeyDown={this.handleKeyDown}
           onKeyPress={this.handleInput}
           onChange={this.handleChange}
+          autoComplete="off"
+          autoCorrect="off"
+          autoCapitalize="off"
       />
     </div>;
   }
