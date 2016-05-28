@@ -12,6 +12,7 @@ class Term extends React.Component {
     this.handleInput = this.handleInput.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.handleChange = this.handleChange.bind(this);
     this.bindTermRef = this.bindTermRef.bind(this);
     this.bindPromptRef = this.bindPromptRef.bind(this);
   }
@@ -44,7 +45,10 @@ class Term extends React.Component {
       }
       return this.props.run();
     }
-    this.props.appendCmd(e.key);
+  }
+
+  handleChange(e) {
+    this.props.setCmd(e.target.value);
   }
 
   handleKeyDown(e) {
@@ -158,6 +162,7 @@ class Term extends React.Component {
           value={this.props.cmd}
           onKeyDown={this.handleKeyDown}
           onKeyPress={this.handleInput}
+          onChange={this.handleChange}
       />
     </div>;
   }
