@@ -25,20 +25,22 @@ store.dispatch(setConfig({
   logger: window.TUTORIAL_LOG_ENDPOINT
 }));
 
+function termProvider(maxHeight, autoFocus) {
+  return <Provider store={store}>
+    <Term maxHeight={maxHeight} autoFocus={autoFocus}/>
+  </Provider>;
+}
+
 if (window.$) {
   window.$('.js-terminal').each(
     (_, el) => {
-      render((
-        <Provider store={store}>
-          <Term maxHeight={window.$(el).data('maxHeight') || 600}/>
-        </Provider>
-      ), el);
+      const jElement = window.$(el);
+      const autoFocus = jElement.data('auto-focus') !== undefined ? jElement.data('auto-focus') : true;
+      const maxWidth = jElement.data('max-height') || 600;
+
+      render(termProvider(maxWidth, autoFocus), el);
     }
   );
 } else {
-  render((
-    <Provider store={store}>
-      <Term maxHeight={600}/>
-    </Provider>
-  ), document.getElementById('root'));
+  render(termProvider(600, true), document.getElementById('root'));
 }
