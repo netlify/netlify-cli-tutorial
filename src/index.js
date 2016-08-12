@@ -30,7 +30,7 @@ if (window.$) {
     (_, el) => {
       render((
         <Provider store={store}>
-          <Term maxHeight={window.$(el).data('maxHeight') || 600} autoFocus={window.$(el).data('autoFocus') || true}/>
+          <Term maxHeight={window.$(el).data('max-height') || 600} autoFocus={window.$(el).data('auto-focus') || true}/>
         </Provider>
       ), el);
     }
