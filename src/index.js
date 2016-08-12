@@ -30,7 +30,7 @@ if (window.$) {
     (_, el) => {
       render((
         <Provider store={store}>
-          <Term maxHeight={window.$(el).data('maxHeight') || 600}/>
+          <Term maxHeight={window.$(el).data('maxHeight') || 600} autoFocus={window.$(el).data('autoFocus') || true}/>
         </Provider>
       ), el);
     }
@@ -38,7 +38,7 @@ if (window.$) {
 } else {
   render((
     <Provider store={store}>
-      <Term maxHeight={600}/>
+      <Term maxHeight={600} autoFocus={true}/>
     </Provider>
   ), document.getElementById('root'));
 }

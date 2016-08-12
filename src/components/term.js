@@ -18,16 +18,17 @@ class Term extends React.Component {
   }
 
   componentDidMount() {
+    const { autoFocus } = this.props;
     this.props.initFilesystem(root);
-    this.prompt && this.prompt.focus();
+    autoFocus && this.prompt && this.prompt.focus();
   }
 
   componentDidUpdate() {
-    const { maxHeight } = this.props;
+    const { maxHeight, autoFocus } = this.props;
     const height = this.term.scrollHeight > maxHeight ? maxHeight : this.term.scrollHeight;
     this.term.style.height = `${height}px`;
     this.term.scrollTop = this.term.scrollHeight;
-    this.prompt && this.prompt.focus();
+    autoFocus && this.prompt && this.prompt.focus();
   }
 
   startRecording() {
