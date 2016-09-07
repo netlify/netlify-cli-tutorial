@@ -55,6 +55,7 @@ class Term extends React.Component {
     this.startRecording();
     switch (e.keyCode) {
       case 8:
+        e.preventDefault();
         const cmd = this.props.cmd.slice(0, -1);
         this.props.setCmd(cmd);
         break;
